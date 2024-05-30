@@ -13,7 +13,7 @@
   "commands": [
     {
       "name": "index",
-      "title": "Show Network Drives",
+      "title": "List Network Drive",
       "description": "Show available network drives/volumes present on the specified IP/Domain",
       "mode": "view"
     }
@@ -22,20 +22,20 @@
     {
       "type": "textfield",
       "name": "pref_smb_ip",
-      "title": "Domain / IP address",
-      "description": "The doamin or IP address of the SMB server.",
+      "title": "Domain / IP",
+      "description": "The doamin or IP address of the network drive.",
       "required": true
     },{
         "type": "textfield",
         "name": "pref_smb_usr",
         "title": "Username",
-        "description": "The username to login with.",
+        "description": "The username to authenticate with.",
         "required": true
       },{
         "type": "password",
         "name": "pref_smb_pwd",
         "title": "Passowrd",
-        "description": "The password of the user.",
+        "description": "The password to authenticate with.",
         "required": true
       }
   ],
