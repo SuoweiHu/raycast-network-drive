@@ -1,9 +1,9 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "network-drive",
-  "title": "network-drive",
+  "title": "Network Drive",
   "description": "List the available disk volume of a specified IP address (via SMB), mount and unmount those drives.",
-  "icon": "nas-2.png",
+  "icon": "icon.png",
   "author": "SuoweiHu",
   "categories": [
     "Productivity",
