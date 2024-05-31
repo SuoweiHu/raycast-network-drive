@@ -25,23 +25,25 @@
       "title": "Domain / IP",
       "description": "The doamin or IP address of the network drive.",
       "required": true
-    },{
-        "type": "textfield",
-        "name": "pref_smb_usr",
-        "title": "Username",
-        "description": "The username to authenticate with.",
-        "required": true
-      },{
-        "type": "password",
-        "name": "pref_smb_pwd",
-        "title": "Passowrd",
-        "description": "The password to authenticate with.",
-        "required": true
-      }
+    },
+    {
+      "type": "textfield",
+      "name": "pref_smb_usr",
+      "title": "Username",
+      "description": "The username to authenticate with.",
+      "required": true
+    },
+    {
+      "type": "password",
+      "name": "pref_smb_pwd",
+      "title": "Passowrd",
+      "description": "The password to authenticate with.",
+      "required": true
+    }
   ],
   "dependencies": {
     "@raycast/api": "^1.75.1",
-    "mac-network-drive": "^1.0.1"
+    "@raycast/utils": "^1.15.0"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.6",
