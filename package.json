@@ -5,7 +5,6 @@
   "description": "List the available disk volume of a specified IP address (via SMB), mount and unmount those drives.",
   "icon": "icon.png",
   "author": "SuoweiHu",
-  "owner": "sh-raycast",
   "categories": [
     "Productivity",
     "Developer Tools"
