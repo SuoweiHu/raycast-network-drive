@@ -22,11 +22,7 @@ function List_SMB_Volumes() {
 
 function List_SMB_VolumeItem(props: { vol: string; vols: string[] }) {
   return (
-    <List.Item
-        title={props.vol}
-        key={props.vol}
-        actions={<List_SMB_ActionPanel vol={props.vol} vols={props.vols} />}
-    />
+    <List.Item title={props.vol} key={props.vol} actions={<List_SMB_ActionPanel vol={props.vol} vols={props.vols} />} />
   );
 }
 
@@ -55,9 +51,9 @@ function List_SMB_ActionPanel(props: { vol: string; vols: string[] }) {
           await delay(1000);
           exec(`/usr/sbin/diskutil unmount "/Volumes/${props.vol}"`, async (_err, stdout) => {
             if (!stdout.includes("Unmount successful")) {
-                showHUD("Action Failed ⚠️");
+              showHUD("Action Failed ⚠️");
             } else {
-                showHUD(`Unmounted  [${props.vol}]  🪂🌍`);
+              showHUD(`Unmounted  [${props.vol}]  🪂🌍`);
             }
           });
         }}
