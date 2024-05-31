@@ -84,6 +84,34 @@ function DriveActions(props: { vol: string; mounted_vols: string[]; set_update: 
             });
           }}
         ></Action>
+        <Action
+          title="Unmount All"
+          shortcut={{ modifiers: ["ctrl", "shift"], key: "x" }}
+          onAction={async () => {
+            if (
+              await confirmAlert({
+                icon: Icon.AlarmRinging,
+                title: `Are you sure you want to \n "Unmount All Drives" ?`,
+              })
+            ) {
+              showToast({ title: "Unmounting All...", style: Toast.Style.Animated });
+              await delayOperation(1000);
+              if (!(props.mounted_vols == undefined || props.mounted_vols.length == 0)) {
+                props.mounted_vols.forEach((_vol_) => {
+                  exec(`/usr/sbin/diskutil unmount "/Volumes/${_vol_}"`, async (err) => {
+                    if (err) {
+                      showToast({ title: "Action Failed", style: Toast.Style.Failure });
+                    }
+                    showHUD("Unmounted All  🪂🌍");
+                    props.set_update(true);
+                  });
+                });
+              } else {
+                showHUD("Unmounted All  🪂🌍");
+              }
+            }
+          }}
+        ></Action>
       </ActionPanel.Section>
       <ActionPanel.Section title="Specific Option">
         <Action
@@ -118,34 +146,6 @@ function DriveActions(props: { vol: string; mounted_vols: string[]; set_update: 
                 }
                 props.set_update(true);
               });
-            }
-          }}
-        ></Action>
-        <Action
-          title="Unmount All"
-          shortcut={{ modifiers: ["ctrl", "shift"], key: "x" }}
-          onAction={async () => {
-            if (
-              await confirmAlert({
-                icon: Icon.AlarmRinging,
-                title: `Are you sure you want to \n "Unmount All Drives" ?`,
-              })
-            ) {
-              showToast({ title: "Unmounting All...", style: Toast.Style.Animated });
-              await delayOperation(1000);
-              if (!(props.mounted_vols == undefined || props.mounted_vols.length == 0)) {
-                props.mounted_vols.forEach((_vol_) => {
-                  exec(`/usr/sbin/diskutil unmount "/Volumes/${_vol_}"`, async (err) => {
-                    if (err) {
-                      showToast({ title: "Action Failed", style: Toast.Style.Failure });
-                    }
-                    showHUD("Unmounted All  🪂🌍");
-                    props.set_update(true);
-                  });
-                });
-              } else {
-                showHUD("Unmounted All  🪂🌍");
-              }
             }
           }}
         ></Action>
