@@ -45,7 +45,6 @@ export async function getNetworkDrives(set_data: Dispatch<SetStateAction<string[
                 }
               }
             });
-            console.log("XXXXXx");
             set_data(stdout_drive);
           } catch (err) {
             set_data([]);
