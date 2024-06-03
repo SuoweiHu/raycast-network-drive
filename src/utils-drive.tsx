@@ -7,6 +7,26 @@ export function delayOperation(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
+export function checkMounted(_vol_: string, mounted_vols: string[]): boolean {
+  let rtn_match = false;
+  mounted_vols.forEach((mounted_vol) => {
+    if (mounted_vol.split("-")[0] == _vol_) {
+      rtn_match = true;
+    }
+  });
+  return rtn_match;
+}
+
+export function findMounted(_vol_: string, mounted_vols: string[]): string {
+  let rtn_match = "";
+  mounted_vols.forEach((mounted_vol) => {
+    if (mounted_vol.split("-")[0] == _vol_) {
+      rtn_match = "/Volumes/" + mounted_vol;
+    }
+  });
+  return rtn_match;
+}
+
 export async function getNetworkDrivesMounted(set_data: Dispatch<SetStateAction<string[]>>) {
   exec("/sbin/mount", (_err, stdout: string) => {
     const mounted_networkDrives_strline = stdout.split("\n").filter((line: string) => {

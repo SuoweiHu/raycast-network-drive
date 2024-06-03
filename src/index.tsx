@@ -2,7 +2,7 @@ import { ActionPanel, Action, List, showToast, showHUD, Toast, Icon, Color, conf
 import { exec } from "child_process";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { get_pref_smb_ip } from "./utils-preference";
-import { delayOperation, getNetworkDrives, getNetworkDrivesMounted } from "./utils-drive";
+import { checkMounted, delayOperation, findMounted, getNetworkDrives, getNetworkDrivesMounted } from "./utils-drive";
 
 export default function Command() {
   const [network_drivess, set_networkDrives] = useState<string[]>([]);
@@ -24,7 +24,7 @@ export default function Command() {
 }
 
 function DriveItem(props: { vol: string; mounted_vols: string[]; set_update: Dispatch<SetStateAction<boolean>> }) {
-  const mnt = props.mounted_vols.includes(props.vol);
+  const mnt = checkMounted(props.vol, props.mounted_vols);
   return (
     <List.Item
       title={props.vol}
@@ -41,7 +41,7 @@ function DriveActions(props: { vol: string; mounted_vols: string[]; set_update: 
         <Action
           title="Mount/Unmount"
           onAction={async () => {
-            const mouned = props.mounted_vols.includes(props.vol);
+            const mouned = checkMounted(props.vol, props.mounted_vols);
             if (!mouned) {
               showToast({ title: "Mounting...", style: Toast.Style.Animated });
               await delayOperation(1000);
@@ -55,17 +55,20 @@ function DriveActions(props: { vol: string; mounted_vols: string[]; set_update: 
             } else {
               showToast({ title: "Unmounting...", style: Toast.Style.Animated });
               await delayOperation(1000);
-              if (!props.mounted_vols.includes(props.vol)) {
+              if (!checkMounted(props.vol, props.mounted_vols)) {
                 showToast({ title: `${props.vol} is Already Unmounted`, style: Toast.Style.Failure });
               } else {
-                exec(`/usr/sbin/diskutil unmount "/Volumes/${props.vol}"`, async (_err, stdout) => {
-                  if (!stdout.includes("Unmount successful")) {
-                    showToast({ title: "Action Failed", style: Toast.Style.Failure });
-                  } else {
-                    showToast({ title: `${props.vol} Unmounted`, style: Toast.Style.Success });
-                  }
-                  props.set_update(true);
-                });
+                exec(
+                  `/usr/sbin/diskutil unmount "${findMounted(props.vol, props.mounted_vols)}"`,
+                  async (_err, stdout) => {
+                    if (!stdout.includes("Unmount successful")) {
+                      showToast({ title: "Action Failed", style: Toast.Style.Failure });
+                    } else {
+                      showToast({ title: `${props.vol} Unmounted`, style: Toast.Style.Success });
+                    }
+                    props.set_update(true);
+                  },
+                );
               }
             }
           }}
@@ -79,7 +82,7 @@ function DriveActions(props: { vol: string; mounted_vols: string[]; set_update: 
               if (err) {
                 showHUD("Action Failed ⚠️");
               }
-              exec(`open "/Volumes/${props.vol}"`);
+              exec(`open "${findMounted(props.vol, props.mounted_vols)}"`);
               showHUD(`Mounted  [${props.vol}]  🚀🌖`);
             });
           }}
@@ -98,7 +101,7 @@ function DriveActions(props: { vol: string; mounted_vols: string[]; set_update: 
               await delayOperation(1000);
               if (!(props.mounted_vols == undefined || props.mounted_vols.length == 0)) {
                 props.mounted_vols.forEach((_vol_) => {
-                  exec(`/usr/sbin/diskutil unmount "/Volumes/${_vol_}"`, async (err) => {
+                  exec(`/usr/sbin/diskutil unmount "${findMounted(_vol_, props.mounted_vols)}"`, async (err) => {
                     if (err) {
                       showToast({ title: "Action Failed", style: Toast.Style.Failure });
                     }
@@ -138,14 +141,17 @@ function DriveActions(props: { vol: string; mounted_vols: string[]; set_update: 
             if (!props.mounted_vols.includes(props.vol)) {
               showToast({ title: `${props.vol} is Already Unmounted`, style: Toast.Style.Failure });
             } else {
-              exec(`/usr/sbin/diskutil unmount "/Volumes/${props.vol}"`, async (_err, stdout) => {
-                if (!stdout.includes("Unmount successful")) {
-                  showToast({ title: "Action Failed", style: Toast.Style.Failure });
-                } else {
-                  showToast({ title: `${props.vol} Unmounted`, style: Toast.Style.Success });
-                }
-                props.set_update(true);
-              });
+              exec(
+                `/usr/sbin/diskutil unmount "${findMounted(props.vol, props.mounted_vols)}"`,
+                async (_err, stdout) => {
+                  if (!stdout.includes("Unmount successful")) {
+                    showToast({ title: "Action Failed", style: Toast.Style.Failure });
+                  } else {
+                    showToast({ title: `${props.vol} Unmounted`, style: Toast.Style.Success });
+                  }
+                  props.set_update(true);
+                },
+              );
             }
           }}
         ></Action>
